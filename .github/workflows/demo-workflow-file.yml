@@ -1,9 +1,9 @@
 name: Demo Python Workflow
 on:
   push:
-  
+
 jobs:
-  build:
+  build-and-push-image:
     runs-on: ubuntu-latest
     strategy:
       matrix:
