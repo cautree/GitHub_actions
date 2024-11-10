@@ -2,8 +2,8 @@ name: Demo Python Workflow
 on:
   push:
     branches: ['main']
-
-jobs:
+    
+  jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     strategy:
