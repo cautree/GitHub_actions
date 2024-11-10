@@ -1,33 +1,33 @@
-name: Demo Python Workflow
-
+name: example-basic
+# This workflow represents a set of basic End-to-End tests
 on:
   push:
-    branches: ['main']
-    
-  jobs:
-    build-and-push-image:
-      runs-on: ubuntu-latest
-      strategy:
-      matrix:
-        python-version: ["3.8", "3.10"]
+    branches:
+      - 'master'
+  pull_request:
+  workflow_dispatch:
 
+jobs:
+
+  basic:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04, windows-2022, macos-14]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python for Demo
-        uses: actions/setup-python@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress tests
+        # normally you would write
+        # uses: cypress-io/github-action@v6
+        uses: ./
+        # the parameters below are only necessary
+        # because we are running these examples in a monorepo
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies for demo Python project  
-        run: |
-          python -m pip install --upgrade pip
-          pip install flake8 pytest
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Linting project with flake8
-        run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: Testing the project using pytest
-   run: |
-     pip install pytest
-     pip install pytest-cov
-     pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+          working-directory: examples/basic
+          # just for full picture after installing Cypress
+          # print information about detected browsers, etc
+          # see https://on.cypress.io/command-line#cypress-info
+          build: npx cypress info
