@@ -1,6 +1,7 @@
 name: Demo Python Workflow
 on:
   push:
+    branches: ['main']
 
 jobs:
   build-and-push-image:
